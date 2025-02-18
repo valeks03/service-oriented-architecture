@@ -49,14 +49,14 @@ model {
 
     }
 
-    redis = container 'Redis' {
-        description ''
-        technology 'Redis'
-        style {
-            color amber
-            icon tech:redis
-        }
-    }
+    // redis = container 'Redis' {
+    //     description ''
+    //     technology 'Redis'
+    //     style {
+    //         color amber
+    //         icon tech:redis
+    //     }
+    // }
 
 
 
@@ -129,7 +129,7 @@ model {
     apiGateway -> userService 'Маршрутизирует' 'JSON/HTTPS'
     apiGateway -> statisticsService 'Маршрутизирует' 'JSON/HTTPS'
     apiGateway -> postService 'Маршрутизирует' 'JSON/HTTPS'
-    apiGateway -> redis 'Кэширует' 'Redis Protocol'
+    //apiGateway -> redis 'Кэширует' 'Redis Protocol'
 
 
     statisticsService -> clickHouse
@@ -144,6 +144,7 @@ model {
 views {
 
     view {
+        title 'Social Network'
         include *
     }
 }
