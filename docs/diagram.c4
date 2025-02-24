@@ -1,0 +1,150 @@
+specification {
+    element actor
+    element service
+    element component
+    element storage {
+        style {
+            color gray
+            shape cylinder
+        }
+    }
+    element softwareSystem
+    element container   
+    element mobile
+    element browser
+}
+
+model {
+    customer = actor {
+        style {
+            color green
+            shape person
+        }
+    }
+    mobileApp = mobile 'Social Network Mobile App' {
+        technology 'Kotlin/Android'
+        style {
+            color red
+            shape mobile
+        }
+        icon tech:kotlin
+    }
+
+
+    webApp = browser 'Web Social Network' {
+        technology 'JavaScript'
+        style {
+            color red 
+            shape browser
+        }
+        icon tech:javascript
+    }
+
+    apiGateway = container 'API Gateway' {
+        description "Маршрутизация запросов и управление доступом"
+        technology "Python/Flask"
+        style {
+            icon tech:python 
+        }
+
+    }
+
+    // redis = container 'Redis' {
+    //     description ''
+    //     technology 'Redis'
+    //     style {
+    //         color amber
+    //         icon tech:redis
+    //     }
+    // }
+
+
+
+    userService = container 'UserService' {
+        description 'Регистрация, аутентификация и хранение данных пользователей, включая роли'
+        technology 'Java/Spring Boot'
+        style {
+            icon tech:spring 
+        }
+    }
+
+    postgresBd = storage 'PostgresSQL' {
+        description 'Хранение данных пользователей'
+        technology 'PostgresSQL'
+        style {
+            icon tech:postgresql
+        }
+    }
+
+
+    statisticsService = container 'StatisticsService' {
+        description 'Подсчет и хранение статистики (лайки, просмотры, комментарии) для постов'
+        technology 'Go'
+        style {
+            icon tech:go 
+        }
+    }
+    clickHouse = storage 'ClickHouse' {
+        description 'Хранение статистических данных'
+        technology 'ClickHouse'
+        style {
+            icon none
+        }
+    }
+
+    rabbit = container 'RabbitMQ' {
+        description 'Брокер сообщений'
+        technology 'RabbitMQ'
+        style {
+            shape queue
+            color sky 
+            icon tech:rabbitmq
+        }
+    }
+
+
+    postService = container 'PostService' {
+        description 'Управление контентом: создание, обновление, удаление и просмотр постов'
+        technology 'Java/Spring Boot'
+        style {
+            icon tech:spring 
+        }
+    }
+
+    cassandraBd = storage 'Cassandra' {
+        description 'Хранение данных о постах и комментариях'
+        technology 'cassandra'
+        style {
+            icon tech:cassandra 
+        }
+    }
+
+
+    customer -> mobileApp
+    customer -> webApp
+    
+    webApp -> apiGateway 'REST API'
+    mobileApp -> apiGateway 'REST API'
+
+    apiGateway -> userService 'Маршрутизирует' 'JSON/HTTPS'
+    apiGateway -> statisticsService 'Маршрутизирует' 'JSON/HTTPS'
+    apiGateway -> postService 'Маршрутизирует' 'JSON/HTTPS'
+    //apiGateway -> redis 'Кэширует' 'Redis Protocol'
+
+
+    statisticsService -> clickHouse
+    userService -> postgresBd
+    postService -> cassandraBd
+
+
+    postService -> rabbit 'Публикует'
+    rabbit -> statisticsService 'Подписывается'
+}
+
+views {
+
+    view {
+        title 'Social Network'
+        include *
+    }
+}
